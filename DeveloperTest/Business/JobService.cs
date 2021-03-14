@@ -21,17 +21,20 @@ namespace DeveloperTest.Business
             {
                 JobId = x.JobId,
                 Engineer = x.Engineer,
-                When = x.When
+                When = x.When,
+                CustomerName = x.Customer.Name,
             }).ToArray();
         }
 
         public JobModel GetJob(int jobId)
         {
-            return context.Jobs.Where(x => x.JobId == jobId).Select(x => new JobModel
+           return context.Jobs.Where(x => x.JobId == jobId).Select(x => new JobModel
             {
                 JobId = x.JobId,
                 Engineer = x.Engineer,
-                When = x.When
+                When = x.When,
+                CustomerName = x.Customer.Name,
+                CustomerType = x.Customer.Type
             }).SingleOrDefault();
         }
 
@@ -40,7 +43,9 @@ namespace DeveloperTest.Business
             var addedJob = context.Jobs.Add(new Job
             {
                 Engineer = model.Engineer,
-                When = model.When
+                When = model.When,
+                CustomerId = model.CustomerId
+                
             });
 
             context.SaveChanges();
@@ -50,6 +55,7 @@ namespace DeveloperTest.Business
                 JobId = addedJob.Entity.JobId,
                 Engineer = addedJob.Entity.Engineer,
                 When = addedJob.Entity.When
+               
             };
         }
     }

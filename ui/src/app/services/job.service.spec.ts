@@ -2,11 +2,16 @@ import { TestBed } from '@angular/core/testing';
 
 import { JobService } from './job.service';
 
-describe('JobService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+describe("JobService", () => {
+  let jobService: JobService, mockHttp;
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    mockHttp = jasmine.createSpyObj("mockHttp", ["get"]);
+    jobService = new JobService(mockHttp);
+  });
 
-  it('should be created', () => {
-    const service: JobService = TestBed.get(JobService);
-    expect(service).toBeTruthy();
+  it("should be created", () => {
+
+    expect(jobService).toBeTruthy();
   });
 });

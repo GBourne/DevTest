@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DeveloperTest.Business.Interfaces;
 using DeveloperTest.Models;
+using Microsoft.Extensions.Logging;
 
 namespace DeveloperTest.Controllers
 {
@@ -9,29 +10,47 @@ namespace DeveloperTest.Controllers
     public class JobController : ControllerBase
     {
         private readonly IJobService jobService;
+        private readonly ILogger<JobController> _logger;
 
-        public JobController(IJobService jobService)
+        public JobController(IJobService jobService, ILogger<JobController> logger)
         {
             this.jobService = jobService;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(jobService.GetJobs());
+            try
+            {
+                return Ok(jobService.GetJobs());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var job = jobService.GetJob(id);
-
-            if (job == null)
+            try
             {
-                return NotFound();
-            }
+                var job = jobService.GetJob(id);
 
-            return Ok(job);
+                if (job == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(job);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost]
@@ -42,9 +61,17 @@ namespace DeveloperTest.Controllers
                 return BadRequest("Date cannot be in the past");
             }
 
-            var job = jobService.CreateJob(model);
+            try
+            {
+                var job = jobService.CreateJob(model);
 
-            return Created($"job/{job.JobId}", job);
+                return Created($"job/{job.JobId}", job);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

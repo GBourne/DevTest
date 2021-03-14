@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { JobService } from '../services/job.service';
 import { JobModel } from '../models/job.model';
+import { CustomerType } from '../models/customer-type.enum';
 
 @Component({
   selector: 'app-job-detail',
@@ -11,8 +12,9 @@ import { JobModel } from '../models/job.model';
 export class JobDetailComponent implements OnInit {
 
   private jobId: number;
-
   public job: JobModel;
+  private eCustomerType = CustomerType;
+
 
   constructor(
     private route: ActivatedRoute,

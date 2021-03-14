@@ -1,0 +1,33 @@
+<h2>New customer form</h2>
+<form #customerForm="ngForm" (ngSubmit)="createCustomer(customerForm)">
+  <label for="customerName">Name</label>
+  <input type="text" minlength="5" name="customerName" ngModel required #customerName="ngModel" [(ngModel)]="newCustomer.name"  />
+  <small *ngIf="customerName.invalid">Please specfiy customer's name</small>
+  <label for="customerType">Customer Type</label>
+  <select id="customerType" name="customerType" required #customerType="ngModel" ngModel placeholder="Please select" [(ngModel)]="newCustomer.type">
+    <option *ngFor="let name of enumKeys" [ngValue]="+name">{{eCustomerType[name]}}</option>
+  </select>
+  <small *ngIf="customerType.invalid">Please select customer type</small>
+  <button type="submit" [disabled]="customerForm.invalid">Add Customer</button>
+</form>
+
+
+<h2>Customer list</h2>
+<table spacing="0">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let customer of customers">
+      <td>{{customer.name}}</td>
+      <td>{{eCustomerType[customer.type]}}</td>
+      <td>
+        <a [routerLink]="['/customer', customer.customerId]">Open</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
